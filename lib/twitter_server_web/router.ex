@@ -20,7 +20,9 @@ defmodule TwitterServerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", TwitterServerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", TwitterServerWeb do
+    pipe_through :api
+
+    resources "/tweets", TweetController, except: [:new, :edit]
+  end
 end
