@@ -4,7 +4,9 @@ defmodule TwitterServer.Twitter.Tweet do
 
   schema "tweets" do
     field :content, :string
-    field :retweets, :integer, default: 0
+    field :retweets, {:array, :string}, default: []
+    field :owner_id, :string
+    field :owner_name, :string
 
     timestamps()
   end
@@ -12,8 +14,8 @@ defmodule TwitterServer.Twitter.Tweet do
   @doc false
   def changeset(tweet, attrs) do
     tweet
-    |> cast(attrs, [:content], [:retweets])
-    |> validate_required([:content, :retweets])
+    |> cast(attrs, [:content, :retweets, :owner_id, :owner_name])
+    |> validate_required([:content, :retweets, :owner_id, :owner_name])
     |> validate_length(:content,
       max: 140,
       message: "Tweet content is too long. Maximum 140 characters."
