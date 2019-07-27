@@ -23,6 +23,7 @@ defmodule TwitterServerWeb.Router do
   scope "/api", TwitterServerWeb do
     pipe_through :api
 
-    resources "/tweets", TweetController, except: [:new, :edit]
+    resources "/tweets", TweetController, except: [:new, :edit, :update, :delete]
+    post "/tweets/:id/retweet", TweetController, :retweet
   end
 end

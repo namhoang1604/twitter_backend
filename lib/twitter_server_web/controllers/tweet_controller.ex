@@ -6,7 +6,7 @@ defmodule TwitterServerWeb.TweetController do
 
   action_fallback TwitterServerWeb.FallbackController
 
-  @default_limit 25
+  @default_limit 10
 
   def index(conn, params) do
     limit = get_limit(params["limit"])
@@ -45,6 +45,25 @@ defmodule TwitterServerWeb.TweetController do
 
     with {:ok, %Tweet{}} <- Twitter.delete_tweet(tweet) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def retweet(conn, %{"id" => id, "user_id" => user_id}) do
+    tweet = Twitter.get_tweet!(id)
+
+    retweets_except_the_user =
+      tweet.retweets
+      |> Enum.filter(fn u -> u != user_id end)
+
+    new_retweets =
+      if length(retweets_except_the_user) == length(tweet.retweets) do
+        tweet.retweets |> Enum.concat([user_id])
+      else
+        retweets_except_the_user
+      end
+
+    with {:ok, %Tweet{} = tweet} <- Twitter.update_tweet(tweet, %{"retweets" => new_retweets}) do
+      render(conn, "show.json", tweet: tweet)
     end
   end
 
