@@ -42,5 +42,7 @@ defmodule TwitterServerWeb.Endpoint do
     key: "_twitter_server_key",
     signing_salt: "HR4STvC0"
 
+  plug CORSPlug
+
   plug TwitterServerWeb.Router
 end
