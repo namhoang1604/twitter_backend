@@ -11,6 +11,13 @@ defmodule TwitterServerWeb.TweetView do
   end
 
   def render("tweet.json", %{tweet: tweet}) do
-    %{id: tweet.id, content: tweet.content, retweets: tweet.retweets}
+    %{
+      id: tweet.id,
+      content: tweet.content,
+      retweets: tweet.retweets,
+      owner_id: tweet.owner_id,
+      owner_name: tweet.owner_name,
+      inserted_at: tweet.inserted_at
+    }
   end
 end
