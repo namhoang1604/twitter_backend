@@ -14,6 +14,7 @@ defmodule TwitterServer.Twitter do
   """
   def list_tweets(limit, page) do
     Tweet
+    |> select([t], t)
     |> add_limit_offset(limit, page)
     |> Repo.all()
   end
