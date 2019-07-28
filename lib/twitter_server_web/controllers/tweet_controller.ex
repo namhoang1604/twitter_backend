@@ -63,6 +63,12 @@ defmodule TwitterServerWeb.TweetController do
       end
 
     with {:ok, %Tweet{} = tweet} <- Twitter.update_tweet(tweet, %{"retweets" => new_retweets}) do
+      TwitterServerWeb.Endpoint.broadcast(
+        "tweets:#{tweet.id}",
+        "update_tweets",
+        TwitterServerWeb.TweetView.render("show.json", tweet: tweet)
+      )
+
       render(conn, "show.json", tweet: tweet)
     end
   end
